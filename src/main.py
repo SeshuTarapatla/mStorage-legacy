@@ -67,8 +67,8 @@ class MainPage:
         sleep(1)
 
         self.pages = Pages(self.page)
-        self.top_rail = NavigationRail()
-        self.top_rail.destinations = [
+        self.navigation_rail = NavigationRail()
+        self.navigation_rail.destinations = [
             NavigationRailDestination(
                 "Encode", ft.Icons.ARCHIVE_OUTLINED, ft.Icons.ARCHIVE
             ),
@@ -86,8 +86,8 @@ class MainPage:
             ),
             NavigationRailDestination("Info", ft.Icons.INFO_OUTLINED, ft.Icons.INFO),
         ]
-        self.top_rail.on_change = self.handle_tabs
-        self.main_container = ft.Container(expand=True)
+        self.navigation_rail.on_change = self.handle_tabs
+        self.main_container = ft.Container(expand=True, padding=ft.Padding(0,0,30,0))
 
         self.reset()
         self.page.add(
@@ -96,12 +96,19 @@ class MainPage:
                 [
                     ft.Column(
                         [
-                            self.top_rail,
+                            self.navigation_rail,
                         ],
                         alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                         width=70,
                     ),
                     self.main_container,
+                    # ft.Column(
+                    #     [
+                    #         ft.Container(expand=True)
+                    #     ],
+                    #     alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                    #     width=30,
+                    # )
                 ],
                 expand=True,
             ),
@@ -113,7 +120,7 @@ class MainPage:
             controls.clear()
 
     def handle_tabs(self, e: ft.ControlEvent = cast(ft.ControlEvent, None)) -> None:
-        match self.top_rail.selected_index:
+        match self.navigation_rail.selected_index:
             case 0:
                 self.page.theme = TabThemes.BLUE
                 self.main_container.content = self.pages.encode_page
