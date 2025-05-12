@@ -32,6 +32,7 @@ path = "src"
 [tool.uv]
 dev-dependencies = [
     "flet[all]==0.28.2",
+    "ipykernel>=6.29.5",
 ]
 
 [tool.poetry]

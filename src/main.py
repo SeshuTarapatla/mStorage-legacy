@@ -1,5 +1,8 @@
+from time import sleep
 from typing import cast
 import flet as ft
+
+from pages import Pages
 
 
 class AppBar(ft.AppBar):
@@ -26,12 +29,19 @@ class NavigationRailDestination(ft.NavigationRailDestination):
 class NavigationRail(ft.NavigationRail):
     def __init__(self, height: int | None = None) -> None:
         super().__init__()
-        self.selected_index = 0
+        self.selected_index = 1
         self.label_type = ft.NavigationRailLabelType.ALL
         if height:
             self.height = height
         else:
             self.expand = True
+
+class DecodePage(ft.Container):
+    def __init__(self) -> None:
+        super().__init__()
+        self.expand = True
+        self.content = ft.Text("DECODE", size=30)
+        self.alignment = ft.alignment.center
 
 
 class TabThemes:
@@ -45,8 +55,18 @@ class MainPage:
     def __init__(self, page: ft.Page) -> None:
         self.page = page
         self.page.title = "Flet testing"
-
         self.app_bar = AppBar("mStorage")
+
+        self.page.add(
+            self.app_bar,
+            ft.Container(
+                content=ft.ProgressRing(), expand=True, alignment=ft.alignment.center
+            ),
+        )
+        self.page.update()
+        sleep(1)
+
+        self.pages = Pages(self.page)
         self.top_rail = NavigationRail()
         self.top_rail.destinations = [
             NavigationRailDestination(
@@ -67,11 +87,9 @@ class MainPage:
             NavigationRailDestination("Info", ft.Icons.INFO_OUTLINED, ft.Icons.INFO),
         ]
         self.top_rail.on_change = self.handle_tabs
-        self.main_container = ft.Container(
-            bgcolor=ft.Colors.BLUE, expand=True, border_radius=10, opacity=0.1
-        )
-        self.handle_tabs()
+        self.main_container = ft.Container(expand=True)
 
+        self.reset()
         self.page.add(
             self.app_bar,
             ft.Row(
@@ -88,22 +106,30 @@ class MainPage:
                 expand=True,
             ),
         )
+        self.handle_tabs()
+
+    def reset(self) -> None:
+        if controls := self.page.controls:
+            controls.clear()
 
     def handle_tabs(self, e: ft.ControlEvent = cast(ft.ControlEvent, None)) -> None:
         match self.top_rail.selected_index:
             case 0:
                 self.page.theme = TabThemes.BLUE
-                self.main_container.bgcolor = ft.Colors.BLUE
+                self.main_container.content = self.pages.encode_page
             case 1:
                 self.page.theme = TabThemes.GREEN
-                self.main_container.bgcolor = ft.Colors.GREEN
+                self.main_container.content = self.pages.decode_page
             case 2:
                 self.page.theme = TabThemes.RED
-                self.main_container.bgcolor = ft.Colors.RED
+                self.main_container.content = self.pages.player_page
             case 3:
                 self.page.theme = TabThemes.PURPLE
-                self.main_container.bgcolor = ft.Colors.PURPLE
-
+                self.main_container.content = self.pages.gallery_page
+            case 4:
+                self.main_container.content = self.pages.settings_page
+            case 5:
+                self.main_container.content = self.pages.info_page
         self.page.update()
 
 
