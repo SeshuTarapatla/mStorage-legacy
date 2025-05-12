@@ -1,0 +1,110 @@
+from typing import cast
+import flet as ft
+
+
+class AppBar(ft.AppBar):
+    def __init__(self, title: str) -> None:
+        super().__init__()
+        self.title = ft.Text(title)
+
+
+class NavigationRailDestination(ft.NavigationRailDestination):
+    def __init__(
+        self,
+        label: str,
+        icon: ft.Icons | None = None,
+        selected_icon: ft.Icons | None = None,
+    ):
+        super().__init__()
+        self.label = label
+        if isinstance(icon, ft.Icons):
+            self.icon = icon
+        if isinstance(selected_icon, ft.Icons):
+            self.selected_icon = selected_icon
+
+
+class NavigationRail(ft.NavigationRail):
+    def __init__(self, height: int | None = None) -> None:
+        super().__init__()
+        self.selected_index = 0
+        self.label_type = ft.NavigationRailLabelType.ALL
+        if height:
+            self.height = height
+        else:
+            self.expand = True
+
+
+class TabThemes:
+    RED = ft.Theme(ft.Colors.RED)
+    BLUE = ft.Theme(ft.Colors.BLUE)
+    GREEN = ft.Theme(ft.Colors.GREEN)
+    PURPLE = ft.Theme(ft.Colors.PURPLE)
+
+
+class MainPage:
+    def __init__(self, page: ft.Page) -> None:
+        self.page = page
+        self.page.title = "Flet testing"
+
+        self.app_bar = AppBar("mStorage")
+        self.top_rail = NavigationRail()
+        self.top_rail.destinations = [
+            NavigationRailDestination(
+                "Encode", ft.Icons.ARCHIVE_OUTLINED, ft.Icons.ARCHIVE
+            ),
+            NavigationRailDestination(
+                "Decode", ft.Icons.VIDEO_FILE_OUTLINED, ft.Icons.VIDEO_FILE
+            ),
+            NavigationRailDestination(
+                "Player", ft.Icons.PLAY_ARROW_OUTLINED, ft.Icons.PLAY_ARROW
+            ),
+            NavigationRailDestination(
+                "Gallery", ft.Icons.LOCAL_MOVIES_OUTLINED, ft.Icons.LOCAL_MOVIES
+            ),
+            NavigationRailDestination(
+                "Settings", ft.Icons.SETTINGS_OUTLINED, ft.Icons.SETTINGS
+            ),
+            NavigationRailDestination("Info", ft.Icons.INFO_OUTLINED, ft.Icons.INFO),
+        ]
+        self.top_rail.on_change = self.handle_tabs
+        self.main_container = ft.Container(
+            bgcolor=ft.Colors.BLUE, expand=True, border_radius=10, opacity=0.1
+        )
+        self.handle_tabs()
+
+        self.page.add(
+            self.app_bar,
+            ft.Row(
+                [
+                    ft.Column(
+                        [
+                            self.top_rail,
+                        ],
+                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                        width=70,
+                    ),
+                    self.main_container,
+                ],
+                expand=True,
+            ),
+        )
+
+    def handle_tabs(self, e: ft.ControlEvent = cast(ft.ControlEvent, None)) -> None:
+        match self.top_rail.selected_index:
+            case 0:
+                self.page.theme = TabThemes.BLUE
+                self.main_container.bgcolor = ft.Colors.BLUE
+            case 1:
+                self.page.theme = TabThemes.GREEN
+                self.main_container.bgcolor = ft.Colors.GREEN
+            case 2:
+                self.page.theme = TabThemes.RED
+                self.main_container.bgcolor = ft.Colors.RED
+            case 3:
+                self.page.theme = TabThemes.PURPLE
+                self.main_container.bgcolor = ft.Colors.PURPLE
+
+        self.page.update()
+
+
+ft.app(MainPage)
