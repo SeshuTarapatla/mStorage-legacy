@@ -1,12 +1,14 @@
 import flet as ft
 
 from components import AppBar, SideBar
-from pages.decode import DecodePage
-from pages.encode import EncodePage
-from pages.gallery import GalleryPage
-from pages.info import InfoPage
-from pages.player import PlayerPage
-from pages.settings import SettingsPage
+from pages import (
+    DecodePage,
+    EncodePage,
+    GalleryPage,
+    InfoPage,
+    PlayerPage,
+    SettingsPage,
+)
 from ui import Themes
 from vars import TITLE
 
