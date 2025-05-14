@@ -1,15 +1,17 @@
-from pages.common import DragAndDropVideo
-from .base import BasePage, ft
+from typing import Callable
+import flet as ft
+
+from components.videopicker import VideoPicker
 
 
-class PlayerPage(BasePage):
-    def __init__(self, page: ft.Page) -> None:
-        super().__init__(page)
-        self.content = ft.Text("Player", size=30)
-        self.theme = ft.Theme(ft.Colors.RED)
+class PlayerPage(ft.Container):
+    def __init__(self, picker_func: Callable) -> None:
+        super().__init__()
+        self.expand = True
         self.content = ft.Column(
             [
-                DragAndDropVideo(self.theme),
-                ft.Container(bgcolor=ft.Colors.BLACK, height=200, opacity=0),
-            ]
+            VideoPicker("#3a1816", picker_func),
+            ft.Container(expand=3)
+            ],
+            expand=True
         )

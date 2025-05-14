@@ -1,8 +1,8 @@
-from .base import BasePage, ft
+import flet as ft
 
 
-class InfoPage(BasePage):
-    def __init__(self, page: ft.Page) -> None:
-        super().__init__(page)
-        self.content = ft.Text("Info", size=30)
-
+class InfoPage(ft.Container):
+    def __init__(self) -> None:
+        super().__init__()
+        self.expand = True
+        
