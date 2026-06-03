@@ -1,0 +1,28 @@
+name: mstorage
+description: "Encode and decode movies into MP4 containers."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  archive: ^3.6.1          # AES-encrypted ZIP read/write
+  file_picker: ^8.1.2      # Native Windows file/folder dialogs
+  path_provider: ^2.1.4    # Temp directory for asset extraction
+  path: ^1.9.0             # Path manipulation
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/bin/

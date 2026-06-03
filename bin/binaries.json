@@ -1,6 +1,0 @@
-{
-  "required-binaries": {
-    "ffmpeg": "ffmpeg.exe",
-    "rar": "rar.exe"
-  }
-}
